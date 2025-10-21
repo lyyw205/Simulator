@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
+  <title>입장 확인</title>
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+  <div id="toast" class="toast hidden"></div>
+  <main class="container">
+
+  <section class="card">
+    <h2>입장 확인</h2>
+    <p class="muted mini">전화번호와 이름을 입력하면 예약자와 매칭 확인 후 홈으로 이동합니다.</p>
+    <div class="row">
+      <div class="col">
+        <label>전화번호(숫자만)</label>
+        <input id="loginPhone" inputmode="numeric" pattern="[0-9]*" placeholder="예) 01012345678" />
+      </div>
+      <div class="col">
+        <label>이름</label>
+        <input id="loginName" placeholder="예) 김민수" />
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div class="col"><button class="btn acc" id="btnLogin">입장하기</button></div>
+      <div class="col"><button class="btn" id="btnDemoFill">데모 데이터 자동입력</button></div>
+    </div>
+    <p id="loginMsg" class="muted mini" style="margin-top:10px"></p>
+    <div class="hr"></div>
+    <details>
+      <summary class="muted mini">운영 팁(임시)</summary>
+      <ul class="mini muted">
+        <li>관리자 화면은 주소에 <code>?admin=1</code> 추가 시 탭 노출</li>
+        <li>모든 데이터는 로컬스토리지에 임시 저장됩니다.</li>
+      </ul>
+    </details>
+  </section>
+
+  </main>
+  <script src="assets/app.js"></script>
+  <script>
+    App.ensureDefaults();
+    App.mobileGuard();
+    App.renderNav('login');
+    
+// Login page logic
+document.getElementById('btnDemoFill').addEventListener('click', ()=>{
+  const guests = App.lsGet(App.KEY.guests, []);
+  const g = guests.find(x=>x.number===1) || guests[0];
+  if(g){ document.getElementById('loginPhone').value = g.phone; document.getElementById('loginName').value = g.name; }
+});
+document.getElementById('btnLogin').addEventListener('click', ()=>{
+  const phone = (document.getElementById('loginPhone').value||'').replace(/\D/g,'');
+  const name = (document.getElementById('loginName').value||'').trim();
+  if(phone.length<9 || name.length<1){ document.getElementById('loginMsg').textContent='전화번호/이름을 올바르게 입력해주세요.'; return; }
+  const guests = App.lsGet(App.KEY.guests, []);
+  const match = guests.find(g => g.phone.replace(/\D/g,'')===phone && g.name===name);
+  if(!match){ document.getElementById('loginMsg').innerHTML='예약 정보가 없습니다. (관리자에서 데모 300명 생성 가능)'; return; }
+  App.lsSet(App.KEY.me, {name, phone, number: match.number});
+  App.toast('입장 성공!');
+  location.href='home.html'+(new URL(location.href)).search;
+});
+
+  </script>
+</body>
+</html>

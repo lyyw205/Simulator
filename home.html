@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
+  <title>홈</title>
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+  <div id="toast" class="toast hidden"></div>
+  <main class="container">
+
+  <section class="card">
+    <div class="row" style="align-items:flex-start">
+      <div class="col" style="min-width:280px">
+        <h2>행사 장소 평면도</h2>
+        <div class="floor">
+          <div>
+            <div class="muted mini" style="text-align:center">(임시) 존 A/B/C, 바, 포토존 표기 예시</div>
+            <svg width="280" height="160" viewBox="0 0 280 160" fill="none">
+              <rect x="6" y="6" width="120" height="70" rx="8" stroke="#33405f"/>
+              <text x="28" y="44" fill="#9aa3b8" font-size="12">존 A</text>
+              <rect x="154" y="6" width="120" height="70" rx="8" stroke="#33405f"/>
+              <text x="176" y="44" fill="#9aa3b8" font-size="12">존 B</text>
+              <rect x="6" y="84" width="120" height="70" rx="8" stroke="#33405f"/>
+              <text x="28" y="122" fill="#9aa3b8" font-size="12">포토존</text>
+              <rect x="154" y="84" width="120" height="70" rx="8" stroke="#33405f"/>
+              <text x="206" y="122" fill="#9aa3b8" font-size="12">바</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <h2>공지사항</h2>
+        <div class="list" id="noticeList"></div>
+        <div class="hr"></div>
+        <h3>주의사항</h3>
+        <ul class="mini muted" id="rulesUl">
+          <li>신분증 미지참 시 입장 제한</li>
+          <li>무단촬영·불쾌행위·과음은 즉시 퇴장(환불X)</li>
+          <li>흡연은 지정구역만 이용</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="kpi">
+      <div class="item"><div class="muted mini">내 번호</div><div id="meNumber" class="badge">-</div></div>
+      <div class="item"><div class="muted mini">받은 호감</div><div id="likesReceived" class="badge ok">0</div></div>
+      <div class="item"><div class="muted mini">스탬프 완료</div><div id="stampsDone" class="badge">0</div></div>
+      <div class="item"><div class="muted mini">알림</div><div id="alertCount" class="badge warn">0</div></div>
+    </div>
+  </section>
+
+  </main>
+  <script src="assets/app.js"></script>
+  <script>
+    App.ensureDefaults();
+    App.mobileGuard();
+    App.renderNav('home');
+    
+App.requireLoginOrRedirect?.(); // optional guard if added later
+(function(){
+  const me = App.lsGet(App.KEY.me);
+  if(!me){ location.href='login.html'; return; }
+  document.getElementById('meNumber').textContent = me.number;
+  const notices = [
+    {id:'n1', text:'입장 마감 21:30, 포토존 대기줄은 오른쪽'},
+    {id:'n2', text:'미션 3개 완료 시 바에서 논알콜 드링크 제공'}
+  ];
+  const list = document.getElementById('noticeList');
+  list.innerHTML='';
+  notices.forEach(n=>{
+    const div = document.createElement('div');
+    div.className='li';
+    div.innerHTML = `<span>${n.text}</span>`;
+    list.appendChild(div);
+  });
+  const likes = App.lsGet(App.KEY.likes, []);
+  const stamps = App.lsGet(App.KEY.stamps, []);
+  const missions = App.lsGet(App.KEY.missions, []);
+  document.getElementById('likesReceived').textContent = likes.filter(l=>l.to===me.number).length;
+  document.getElementById('stampsDone').textContent = `${stamps.filter(s=>s.number===me.number).length}/${missions.length}`;
+  document.getElementById('alertCount').textContent = App.lsGet(App.KEY.alerts, []).length;
+})();
+
+  </script>
+</body>
+</html>
