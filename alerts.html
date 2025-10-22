@@ -5,16 +5,39 @@
   <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
   <title>알림</title>
   <link rel="stylesheet" href="assets/app.css" />
+  <style>
+    .tag{font-size:11px; 
+      color:#5f5f5f; 
+      padding:4px 4px 4px 0;
+      display: flex;
+      justify-content: space-between;
+      width: 100%; 
+      }
+      .time {
+        font-size: 14px;
+        font-weight: 400;
+        color: #8f8f8f;
+      }
+      .category {
+        font-size: 14px;
+        font-weight: 600;
+        color: #8f8f8f;
+      }
+      .alerts-msg {
+        font-size: 16px;
+        font-weight: 500;
+    }
+  </style>
 </head>
 <body>
   <div id="toast" class="toast hidden"></div>
   <main class="container">
 
-  <section class="card">
-    <h2>알림</h2>
-    <div class="list" id="alertList"></div>
-    <p class="muted mini" id="noAlertMsg">아직 알림이 없어요.</p>
-  </section>
+    <section class="card">
+      <h2 class="page-title" >알림</h2>
+      <div class="list" id="alertList"></div>
+      <p class="muted mini" id="noAlertMsg">아직 알림이 없어요.</p>
+    </section>
 
   </main>
   <script src="assets/app.js"></script>
@@ -22,25 +45,60 @@
     App.ensureDefaults();
     App.mobileGuard();
     App.renderNav('alerts');
-    
-(function(){
-  const me = App.lsGet(App.KEY.me); if(!me){ location.href='login.html'; return; }
-  function render(){
-    const list = document.getElementById('alertList');
-    const alerts = App.lsGet(App.KEY.alerts, []).sort((a,b)=>b.at-a.at);
-    list.innerHTML='';
-    if(alerts.length===0){ document.getElementById('noAlertMsg').style.display='block'; return; }
-    document.getElementById('noAlertMsg').style.display='none';
-    alerts.forEach(a=>{
-      const div=document.createElement('div');
-      div.className='li';
-      div.innerHTML = `<span>${a.msg}</span><span class="tag">${new Date(a.at).toLocaleTimeString()}</span>`;
-      list.appendChild(div);
-    });
-  }
-  render();
-})();
 
+    (function(){
+      const me = App.lsGet(App.KEY.me); 
+      if(!me){ location.href='login.html'; return; }
+
+          // === 카테고리 매핑 (라벨/클래스) ===
+      const CATS = {
+        notice: { label: '📢 공지',   cls: 'cat-notice' },
+        like:   { label: '📢 호감',   cls: 'cat-like' },
+        match:  { label: '📢 매칭',   cls: 'cat-match' },
+        system: { label: '📢 시스템', cls: 'cat-system' },
+        default:{ label: '📢 알림',   cls: 'cat-default' }
+      };
+
+      // === 샘플 알림 시드: 기존 알림이 없을 때만 주입 ===
+      const existing = App.lsGet(App.KEY.alerts, []);
+      if (!existing || existing.length === 0) {
+        const now = Date.now();
+        const samples = [
+          { msg: '호감을 3개 받았어요 🎉', at: now - 1000 * 60 * 5 },
+          { msg: '13시 50분부터 로테이션 소개팅이 6층에서 진행됩니다. <br> 선착순 마감되므로 참가를 원하시면 미리 도착 부탁드립니다.', at: now - 1000 * 60 * 60 },
+          { msg: '서로의 호감이 통했어요!', at: now - 1000 * 60 * 60 * 24 }
+        ];
+        App.lsSet(App.KEY.alerts, samples); // ← 여기서 samples를 저장
+      }
+      // ================================================
+
+      function render(){
+        const list = document.getElementById('alertList');
+        const alerts = App.lsGet(App.KEY.alerts, []).sort((a,b)=>b.at-a.at);
+        list.innerHTML='';
+        if(alerts.length===0){ 
+          document.getElementById('noAlertMsg').style.display='block'; 
+          return; 
+        }
+        document.getElementById('noAlertMsg').style.display='none';
+        alerts.forEach(a=>{
+          const cat = CATS[a.cat] || CATS.default;
+          const timeText = new Date(a.at).toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          });
+          const div = document.createElement('div');
+          div.className='li';
+          div.innerHTML = `<div class="tag"><span class="category">${cat.label}</span>
+      <span class="time">${timeText}</span></div>
+      <div><span class="alerts-msg">${a.msg}</span></div>
+    `;
+          list.appendChild(div);
+        });
+      }
+      render();
+    })();
   </script>
 </body>
 </html>

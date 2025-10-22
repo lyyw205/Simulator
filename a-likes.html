@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
+  <title>알림</title>
+  <link rel="stylesheet" href="assets/app.css" />
+  <style> 
+    .toggle{padding:2px 8px; border-radius:12px; background:#f1f5f9; font-weight:700}
+    .toggle.on{background:#e7f7ee; color:#137a3a}
+
+    .ms-head{display:flex; align-items:center; justify-content:space-between}
+    .ms-sub{display:flex; align-items:center; gap:8px}
+    .badge-like{background:#eef5ff; color:#1b4b91; padding:2px 8px; border-radius:999px; font-weight:700}
+    .ms-preview{margin:6px 0 0; color:#4b5563}
+
+    .chip{padding:4px 8px; border-radius:999px; font-size:12px}
+    .chip-wait{background:#f3f4f6; color:#6b7280}
+    .chip-ok{background:#e9fff1; color:#187a42}
+    .chip-error{background:#ffecec; color:#b91c1c}
+    .chip-hold{background:#fff7e6; color:#b45309}
+
+    .ms-actions{display:flex; gap:8px}
+    .btn-pri{flex:1; padding:10px 12px; border-radius:10px; background:#5270ff; color:#fff; border:none}
+    .btn-ghost{padding:10px 12px; border-radius:10px; background:#fff; border:1px solid #e5e7eb}
+    .btn-icon{padding:10px; border-radius:10px; background:#fff; border:1px solid #e5e7eb}
+    /* ===== Milestone(5명 도달) UI ===== */
+    .milestone-banner{
+    position: sticky; top: 0; z-index: 5;
+    background:#fff; padding:10px 12px; border-radius:12px;
+    box-shadow:0 2px 12px rgba(0,0,0,.06); 
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:12px;
+    }
+    .milestone-banner b{ font-size:16px; }
+    .ms-ctrl{ display:flex; align-items:center; gap:8px; }
+
+    .toggle{
+    padding:6px 10px; border-radius:999px; border:1px solid #e5e7eb;
+    background:#fff; font-weight:700; min-width:64px; text-align:center;
+    }
+    .toggle.on{ background:#e7f7ee; color:#137a3a; border-color:#b8e6c9; }
+
+    .tabs-mini{ display:flex; gap:8px; margin:12px 0; }
+    .tabs-mini button{
+    flex:1; padding:10px 12px; border-radius:10px; border:1px solid #e5e7eb; background:#fff;
+    }
+    .tabs-mini .on{ border-color:#93c5fd; box-shadow:0 0 0 4px rgba(59,130,246,.12); }
+
+    .ms-card{     
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 90%;
+    margin: 10px auto;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 0px 24px rgba(0, 0, 0, .10), 0 0px 0 rgba(0, 0, 0, 05);
+    }
+    .ms-head{ display:flex; align-items:center; justify-content:space-between; }
+    .ms-sub{ display:flex; align-items:center; gap:8px; }
+    .badge-like{ background:#eef5ff; color:#1b4b91; padding:2px 8px; border-radius:999px; font-weight:700; }
+    .ms-preview{ margin:4px 0 0; color:#4b5563; }
+
+    .chip{ padding:4px 8px; border-radius:999px; font-size:12px; }
+    .chip-wait{ background:#f3f4f6; color:#6b7280; }
+    .chip-ok{ background:#e9fff1; color:#187a42; }
+    .chip-error{ background:#ffecec; color:#b91c1c; }
+    .chip-hold{ background:#fff7e6; color:#b45309; }
+
+    .ms-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+    .ms-btn-pri{ flex:1; padding:10px 12px; border-radius:10px; background:#5270ff; color:#fff; border:none; }
+    .ms-btn-ghost{ padding:10px 12px; border-radius:10px; background:#fff; border:1px solid #e5e7eb; }
+    .ms-btn-icon{ padding:10px; border-radius:10px; background:#fff; border:1px solid #e5e7eb; }
+
+    .ms-time{ font-size:12px; color:#8f8f8f; margin-left:auto; }
+    .likes-select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      margin: 10px 0;
+      outline: none;
+      background: white;
+    }   
+    .p-text {
+        font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+    <section class="card" id="msCenter">
+    <!-- 상태 탭 -->
+    <div class="tabs-mini" id="msTabs">
+        <button type="button" data-tab="wait" class="on">발송 대기</button>
+        <button type="button" data-tab="sent">발송 완료</button>
+        <button type="button" data-tab="fail">실패</button>
+    </div>
+
+    <!-- 리스트 -->
+    <div class="list" id="msList"></div>
+        <!-- 큐 카드 -->
+        <div class="li ms-card">
+        <div class="ms-head">
+            <div>
+            <b>김민수</b> <span class="muted">(12)</span>
+            </div>
+            <span class="chip chip-wait">대기</span>
+        </div>
+
+        <div class="ms-sub">
+            <span class="badge-like">+5</span>
+            <span class="muted">최근 14:32</span>
+        </div>
+        <select id="selectTarget" class="likes-select">
+          <option value="">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+          <option>“3명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+          <option>“서로 호감이 있는 상대가 생겼어요. 확인해 보세요!”</option>
+        </select>
+
+        <div class="ms-actions">
+            <button class="btn-pri">보내기</button>
+            <button class="btn-ghost">건너뛰기</button>
+            <button class="btn-icon" title="로그"><span>🗒️</span></button>
+        </div>
+        </div>
+    </div>
+    <div class="list" id="msList"></div>
+        <!-- 큐 카드 -->
+        <div class="li ms-card">
+        <div class="ms-head">
+            <div>
+            <b>김민수</b> <span class="muted">(12)</span>
+            </div>
+            <span class="chip chip-wait">발송완료</span>
+        </div>
+
+        <div class="ms-sub">
+            <span class="badge-like">+5</span>
+            <span class="muted">최근 14:32</span>
+        </div>
+        <div>
+          <p class="p-text">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</p>
+        </div>
+    </div>
+    <div class="list" id="msList"></div>
+        <!-- 큐 카드 -->
+        <div class="li ms-card">
+        <div class="ms-head">
+            <div>
+            <b>김민수</b> <span class="muted">(12)</span>
+            </div>
+            <span class="chip chip-wait">실패</span>
+        </div>
+
+        <div class="ms-sub">
+            <span class="badge-like">+5</span>
+            <span class="muted">최근 14:32</span>
+        </div>
+        <select id="selectTarget" class="likes-select">
+          <option value="">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+          <option>“3명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+          <option>“서로 호감이 있는 상대가 생겼어요. 확인해 보세요!”</option>
+        </select>
+
+        <div class="ms-actions">
+            <button class="btn-pri">재전송</button>
+            <button class="btn-ghost">건너뛰기</button>
+            <button class="btn-icon" title="로그"><span>🗒️</span></button>
+        </div>
+        </div>
+    </div>
+  </section>
+
+  </main>
+  <script src="assets/app.js"></script>
+  <script>
+    App.renderNavAlt('alerts');
+
+    (function(){
+    // App 유틸이 있으면 사용, 없으면 로컬 폴백
+    const hasApp = typeof window.App !== 'undefined';
+    const lsGet = (k, fb) => hasApp ? App.lsGet(k, fb) : (JSON.parse(localStorage.getItem(k)) ?? fb);
+    const lsSet = (k, v)   => hasApp ? App.lsSet(k, v)   : localStorage.setItem(k, JSON.stringify(v));
+    const toast = (t)=> (hasApp && App.toast) ? App.toast(t) : alert(t);
+
+    const KEY_Q   = 'evt.ms.queue';   // [{id,number,name,likes, status, at, sentAt?, failReason?}]
+    const KEY_AUTO= 'evt.ms.auto';    // true/false
+
+    // 데모 데이터(처음만)
+    const seedIfEmpty = () => {
+        const q = lsGet(KEY_Q, []);
+        if (q.length) return;
+        const now = Date.now();
+        const demo = [
+        {id:'m-12', number:12, name:'김민수', likes:5, at:now-60_000, status:'wait'},
+        {id:'m-47', number:47, name:'이하늘', likes:5, at:now-120_000, status:'wait'},
+        {id:'m-83', number:83, name:'박서연', likes:7, at:now-180_000, status:'fail', failReason:'통신사 오류'}
+        ];
+        lsSet(KEY_Q, demo);
+        if (lsGet(KEY_AUTO, null) === null) lsSet(KEY_AUTO, false);
+    };
+
+    // 상태
+    let tab = 'wait';   // 'wait' | 'sent' | 'fail'
+    const $count = document.getElementById('msCount');
+    const $list  = document.getElementById('msList');
+    const $tabs  = document.getElementById('msTabs');
+    const $auto  = document.getElementById('msAuto');
+    const $sendAll = document.getElementById('msSendAll');
+
+    seedIfEmpty();
+
+    // 렌더
+    function fmtTime(ts){
+        return new Date(ts).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false});
+    }
+    function read(){ return lsGet(KEY_Q, []); }
+    function write(arr){ lsSet(KEY_Q, arr); }
+
+    function render(){
+        const all = read();
+        const wait = all.filter(x=>x.status==='wait').sort((a,b)=>b.at-a.at);
+        const sent = all.filter(x=>x.status==='sent').sort((a,b)=>b.sentAt-a.sentAt);
+        const fail = all.filter(x=>x.status==='fail').sort((a,b)=>b.at-a.at);
+
+        $count.textContent = wait.length;
+        $auto.classList.toggle('on', !!lsGet(KEY_AUTO,false));
+        $auto.textContent = lsGet(KEY_AUTO,false) ? 'ON' : 'OFF';
+
+        const data = tab==='wait' ? wait : (tab==='sent' ? sent : fail);
+
+        $list.innerHTML = data.map(x => {
+        const chip = x.status==='wait' ? 'chip-wait' : (x.status==='sent' ? 'chip-ok' : 'chip-error');
+        const chipTxt = x.status==='wait' ? '대기' : (x.status==='sent' ? '전송됨' : '실패');
+        const timeTxt = x.status==='sent' ? fmtTime(x.sentAt) : fmtTime(x.at);
+        const reason  = x.status==='fail' ? `<span class="muted">(${x.failReason||'사유 미상'})</span>` : '';
+
+        return `
+            <div class="li ms-card" data-id="${x.id}">
+            <div class="ms-head">
+                <div><b>${x.name}</b> <span class="muted">(${x.number})</span></div>
+                <span class="chip ${chip}">${chipTxt}</span>
+            </div>
+
+            <div class="ms-sub">
+                <span class="badge-like">+${x.likes}</span>
+                <span class="ms-time">${timeTxt}</span>
+            </div>
+
+            <p class="ms-preview">“${x.likes}명이 당신에게 호감을 보냈어요. 앱에서 확인해 보세요!” ${reason}</p>
+
+            <div class="ms-actions">
+                ${x.status==='wait' ? `
+                <button type="button" class="ms-btn-pri" data-act="send">보내기</button>
+                <button type="button" class="ms-btn-ghost" data-act="skip">건너뛰기</button>
+                ` : x.status==='fail' ? `
+                <button type="button" class="ms-btn-pri" data-act="retry">재시도</button>
+                <button type="button" class="ms-btn-ghost" data-act="skip">보류</button>
+                ` : `
+                <button type="button" class="ms-btn-ghost" data-act="remove">기록 삭제</button>
+                `}
+                <button type="button" class="ms-btn-icon" data-act="preview" title="미리보기">🗒️</button>
+            </div>
+            </div>
+        `;
+        }).join('');
+    }
+
+    // 동작
+    function doSend(item){
+        // 여기서 실제 SMS API 연동이 될 자리. 지금은 성공 처리만.
+        item.status = 'sent';
+        item.sentAt = Date.now();
+        toast(`전송 완료: ${item.name}`);
+    }
+    function doFail(item, reason='전송 실패'){
+        item.status = 'fail';
+        delete item.sentAt;
+        item.failReason = reason;
+        toast(`${reason}: ${item.name}`);
+    }
+
+    // 자동발송
+    function autoTick(){
+        const auto = !!lsGet(KEY_AUTO,false);
+        if (!auto) return;
+        const all = read();
+        const firstWait = all.find(x => x.status==='wait');
+        if (firstWait){
+        doSend(firstWait);
+        write(all);
+        render();
+        }
+    }
+    const autoTimer = setInterval(autoTick, 1500); // 1.5초 간격으로 하나씩 처리
+
+    // 이벤트: 탭 전환
+    $tabs.addEventListener('click', (e)=>{
+        const b = e.target.closest('button[data-tab]');
+        if(!b) return;
+        [...$tabs.children].forEach(x=>x.classList.toggle('on', x===b));
+        tab = b.dataset.tab;
+        render();
+    });
+
+    // 이벤트: 토글
+    $auto.addEventListener('click', ()=>{
+        const cur = !!lsGet(KEY_AUTO,false);
+        lsSet(KEY_AUTO, !cur);
+        render();
+    });
+
+    // 이벤트: 리스트 액션
+    $list.addEventListener('click', (e)=>{
+        const btn = e.target.closest('[data-act]');
+        if(!btn) return;
+        const act = btn.dataset.act;
+        const card = e.target.closest('.ms-card');
+        const id = card?.dataset.id;
+        if(!id) return;
+        const all = read();
+        const item = all.find(x=>x.id===id);
+        if(!item) return;
+
+        if (act==='send') doSend(item);
+        else if (act==='retry') doSend(item);     // 데모에선 재시도=성공
+        else if (act==='skip'){ item.status='hold'; toast('보류 처리'); } // 보류 상태(리스트엔 안 보임)
+        else if (act==='remove'){ const i = all.indexOf(item); if(i>=0) all.splice(i,1); toast('기록 삭제'); }
+        else if (act==='preview'){ toast('미리보기: ' + (item.likes)+'명 알림'); }
+
+        write(all);
+        render();
+    });
+
+    // 일괄 발송
+    document.getElementById('msSendAll').addEventListener('click', ()=>{
+        const all = read();
+        const waits = all.filter(x=>x.status==='wait');
+        if (waits.length===0){ toast('대기 항목이 없습니다.'); return; }
+        waits.forEach(doSend);
+        write(all); render();
+    });
+
+    render();
+    })();
+    </script>
+
+</body>
+</html>

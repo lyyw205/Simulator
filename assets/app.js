@@ -119,9 +119,170 @@ function renderNav(active){
   document.body.appendChild(nav); // 하단 고정 바: body 끝에 추가
 }
 
+
+
+
+
+
+
+
+
+// === Demo Seeder: Guests + Likes ===
+(() => {
+  const hasApp = typeof window.App !== 'undefined';
+  const KEY = hasApp ? App.KEY : {
+    guests:'evt.guests', likes:'evt.likes', stamps:'evt.stamps', missions:'evt.missions', alerts:'evt.alerts', me:'evt.me'
+  };
+  const lsGet = hasApp ? App.lsGet : (k, fb)=>{ try{const v=localStorage.getItem(k); return v?JSON.parse(v):fb;}catch(e){return fb;} };
+  const lsSet = hasApp ? App.lsSet : (k, v)=>localStorage.setItem(k, JSON.stringify(v));
+  const toast = (t)=> (hasApp && App.toast) ? App.toast(t) : console.log('[seed]', t);
+
+  // 1) 게스트 시드 (App.genDemoGuests 있으면 사용)
+  function seedGuests(n=300, {overwrite=false}={}){
+    const cur = lsGet(KEY.guests, []);
+    if (cur.length && !overwrite) { toast(`guests 유지: ${cur.length}명`); return cur; }
+    const arr = (hasApp && App.genDemoGuests) 
+      ? App.genDemoGuests(n) 
+      : Array.from({length:n}, (_,i)=>({ number:i+1, name:`게스트${String(i+1).padStart(3,'0')}`, phone:`010${String(10000000+i+1).padStart(8,'0')}`, gender: ((i+1)%2?'M':'F') }));
+    lsSet(KEY.guests, arr);
+    toast(`guests 시드 완료: ${arr.length}명`);
+    return arr;
+  }
+
+  // 2) 호감 시드
+  // - nLikes: 생성 목표 (실제는 상호 생성 시 1~2개씩 늘어남)
+  // - mutualRatio: 상호(양방향)로 만들 비율(0~1)
+  // - days: 최근 n일 내 무작위 시간으로 at 설정
+  // - clear: 기존 likes를 지울지 여부
+  function seedLikes({nLikes=6000, mutualRatio=0.4, days=3, clear=true}={}){
+    const guests = lsGet(KEY.guests, []);
+    if (!guests.length) { throw new Error('guests가 비어 있음. 먼저 seedGuests 호출'); }
+    const gnums = guests.map(g=>g.number);
+
+    let likes = clear ? [] : (lsGet(KEY.likes, [])||[]);
+    const now = Date.now();
+    const span = days*24*60*60*1000;
+
+    const pairSet = new Set(likes.map(l => `${l.from}>${l.to}`));
+
+    const rnd = (arr)=>arr[Math.floor(Math.random()*arr.length)];
+    const randomPair = ()=>{
+      let from, to;
+      do { from = rnd(gnums); to = rnd(gnums); } while(from===to);
+      return [from,to];
+    };
+
+    let i=0;
+    while (i < nLikes) {
+      let [from, to] = randomPair();
+      // 중복 단방향은 건너뛰기
+      if (pairSet.has(`${from}>${to}`)) continue;
+
+      const baseAt = now - Math.floor(Math.random()*span);
+
+      if (Math.random() < mutualRatio && !pairSet.has(`${to}>${from}`)) {
+        // 상호 생성 (2건)
+        likes.push({ from, to, at: baseAt });
+        likes.push({ from: to, to: from, at: baseAt + Math.floor(Math.random()*600000) }); // +최대 10분
+        pairSet.add(`${from}>${to}`); pairSet.add(`${to}>${from}`);
+        i += 2;
+      } else {
+        // 단방향 1건
+        likes.push({ from, to, at: baseAt });
+        pairSet.add(`${from}>${to}`);
+        i += 1;
+      }
+    }
+
+    // 시간순 정렬(오래된 → 최신)
+    likes.sort((a,b)=>a.at-b.at);
+    lsSet(KEY.likes, likes);
+    toast(`likes 시드 완료: ${likes.length}건 (요청 ${nLikes}, 상호비율 ~${mutualRatio*100|0}%)`);
+    return likes;
+  }
+
+  // 3) 한 번에 시드
+  function seedAll({guests=300, likes=6000, mutualRatio=0.4, days=3, overwriteGuests=false, clearLikes=true}={}){
+    const g = seedGuests(guests, {overwrite: overwriteGuests});
+    const l = seedLikes({nLikes: likes, mutualRatio, days, clear: clearLikes});
+    toast(`완료: guests=${g.length}, likes=${l.length}`);
+    return {g, l};
+  }
+
+  // 4) 초기화 헬퍼
+  function resetAll(){
+    ['guests','likes','stamps','missions','alerts','me'].forEach(k => localStorage.removeItem(KEY[k]));
+    toast('localStorage 초기화 완료');
+  }
+
+  // 전역에 잠깐 노출해두면 편함
+  window.__seed = { seedGuests, seedLikes, seedAll, resetAll };
+  toast('시더 준비됨: __seed.seedAll({ guests: 300, likes: 6000 }) 호출');
+
+})();
+
+
+
+
+
+
+//
+function renderNavAlt(active, hrefs = {}) {
+  // 1) 라우트 설정
+  const defaults = {
+    home:   'a-home.html',
+    likes:  'a-likes.html',
+    stamps: 'a-stamp.html',
+    alerts: 'a-alerts.html',
+  };
+  const H = { ...defaults, ...hrefs };
+
+  // 2) 현재 페이지로 active 자동 결정 (매칭 규칙: 끝나는 파일명)
+  function autoActive() {
+    const path = location.pathname.split('/').pop(); // ex) a-alerts.html
+    // path가 없으면 해시 라우팅 등 고려
+    for (const k of Object.keys(H)) {
+      // 완전 일치 또는 파일명 끝이 일치하면 매칭
+      if (H[k] === path || path.endsWith(H[k])) return k;
+    }
+    return null;
+  }
+  const cur = active || autoActive();
+
+  const tabs = [
+    { key:'home',   label:'홈',    iconActive:'assets/img/home-active.png',   iconInactive:'assets/img/home-inactive.png' },
+    { key:'likes',  label:'호감',  iconActive:'assets/img/heart-active.png',  iconInactive:'assets/img/heart-inactive.png' },
+    { key:'stamps', label:'스탬프',iconActive:'assets/img/stamp-active.png',  iconInactive:'assets/img/stamp-inactive.png' },
+    { key:'alerts', label:'알림',  iconActive:'assets/img/bell-active.png',   iconInactive:'assets/img/bell-inactive.png' },
+  ];
+
+  // 기존 nav 제거(중복 방지)
+  document.querySelectorAll('.nav').forEach(el => el.remove());
+
+  // 3) 렌더
+  const nav = document.createElement('div');
+  nav.className = 'nav';
+  nav.innerHTML =
+    `<div class="container"><div class="tabs">` +
+    tabs.map(t => {
+      const isActive = cur === t.key; // 자동/수동 판별 결과
+      const icon = isActive ? t.iconActive : t.iconInactive;
+      const aria = isActive ? ' aria-current="page"' : '';
+      const href = H[t.key] || '#';
+      return `<a class="tab ${isActive ? 'active' : ''}" href="${href}"${aria}>
+        <span class="ico"><img src="${icon}" alt="${t.label}" loading="lazy"></span>
+        <span class="lbl">${t.label}</span>
+      </a>`;
+    }).join('') +
+    `</div></div>`;
+  document.body.appendChild(nav);
+}
+
 function requireLoginOrRedirect(){
   if(!getMe()){ location.href = 'login.html'; }
 }
 
-// Expose for pages
-window.App = { KEY, lsGet, lsSet, genDemoGuests, getMe, ensureDefaults, mobileGuard, renderNav, toast };
+window.App = Object.assign(window.App || {}, {
+  KEY, lsGet, lsSet, genDemoGuests, getMe,
+  ensureDefaults, mobileGuard, renderNav, renderNavAlt, toast
+});

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
+  <title>참가자 리스트</title>
+  <link rel="stylesheet" href="assets/app.css" />
+  <style>
+    /* 표 그리드: [이름(번호)] [받은] [보낸] [매칭상대] */
+    .table{ display:grid; grid-template-columns: 1fr 80px 80px 1fr; gap:8px; }
+    .row{ display:contents; }
+    .th,.td{ padding:10px 4px; background:#fff; border-radius:10px; font-size: 14px; justify-content: center; }
+    .td.center{ text-align:center; }
+    .td.matches{ word-break: break-word; }
+    .pill{ display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; background:#f3f4f6; font-weight:700; }
+
+    /* 제목 바(필터 삭제) */
+    .toolbar{ grid-column:1 / -1; position:sticky; top:0; z-index:5;
+      display:flex; align-items:center; justify-content:space-between;
+      background:#fff; padding:10px 12px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    .toolbar .title{ font-weight:800; font-size:16px; }
+
+    /* 헤더 자체에서 정렬 */
+    .thead{ display:contents; }
+    .th{ font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; }
+    .th .arrow{ font-size:11px; color:#8b93a7; }
+    .th.active{ box-shadow:0 0 0 4px rgba(59,130,246,.12); border:1px solid #93c5fd; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast hidden"></div>
+
+  <main class="container">
+    <section class="card">
+      <div class="table" id="table">
+        <!-- 제목(정렬 컨트롤 제거됨) -->
+        <div class="toolbar"><div class="title">참가자 리스트</div></div>
+
+        <!-- 열 헤더(여기 클릭해서 정렬) -->
+        <div class="thead" id="thead">
+          <div class="th" data-sort="name">이름(번호) <span class="arrow"></span></div>
+          <div class="th center" data-sort="recv">받은 <span class="arrow"></span></div>
+          <div class="th center" data-sort="sent">보낸 <span class="arrow"></span></div>
+          <div class="th" data-sort="matches">매칭 번호 <span class="arrow"></span></div>
+        </div>
+
+        <!-- 리스트 -->
+        <div class="table" id="list" style="display:contents;"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/app.js"></script>
+  <script>
+    App.renderNavAlt?.();
+    App.ensureDefaults?.();
+
+    const guests = App.lsGet(App.KEY.guests, []);
+    const likes  = App.lsGet(App.KEY.likes, []);
+    const recv = new Map(), sent = new Map();
+    likes.forEach(l => { recv.set(l.to,(recv.get(l.to)||0)+1); sent.set(l.from,(sent.get(l.from)||0)+1); });
+
+    const sentSet = new Set(likes.map(l => `${l.from}>${l.to}`));
+    function calcMatchesFor(n){
+      const targets = likes.filter(l => l.from===n).map(l=>l.to);
+      const m=[]; for(const to of targets) if(sentSet.has(`${to}>${n}`)) m.push(to);
+      return [...new Set(m)].sort((a,b)=>a-b);
+    }
+
+    const rows = guests.map(g=>{
+      const n=g.number, m=calcMatchesFor(n);
+      return {
+        number:n,
+        nameText:`${g.name} (${n})`,
+        recv: recv.get(n)||0,
+        sent: sent.get(n)||0,
+        matches:m,
+        matchesText: m.length? m.join(', '):'—'
+      };
+    });
+
+    let sortKey='recv', sortDir='desc'; // 기본: 받은 내림차순
+    function sortRows(){
+      const d = sortDir==='asc'?1:-1;
+      rows.sort((a,b)=>{
+        if(sortKey==='name') return (a.number-b.number)*d;
+        if(sortKey==='matches'){
+          if(a.matches.length!==b.matches.length) return (a.matches.length-b.matches.length)*d;
+          return (a.number-b.number);
+        }
+        if(a[sortKey]!==b[sortKey]) return (a[sortKey]-b[sortKey])*d;
+        return (a.number-b.number);
+      });
+    }
+
+    const $list = document.getElementById('list');
+    function render(){
+      sortRows();
+      $list.innerHTML = rows.map(r=>`
+        <div class="row">
+          <div class="td">${r.nameText}</div>
+          <div class="td center"><span class="pill">+${r.recv}</span></div>
+          <div class="td center"><span class="pill">${r.sent}</span></div>
+          <div class="td matches">${r.matchesText}</div>
+        </div>
+      `).join('');
+      paintHeader();
+    }
+
+    function paintHeader(){
+      document.querySelectorAll('#thead .th').forEach(th=>{
+        const isCur = th.dataset.sort===sortKey;
+        th.classList.toggle('active', isCur);
+        const arrow = th.querySelector('.arrow');
+        if(arrow) arrow.textContent = isCur ? (sortDir==='asc'?'↑':'↓') : '↕';
+      });
+    }
+
+    document.getElementById('thead').addEventListener('click', (e)=>{
+      const th = e.target.closest('.th[data-sort]');
+      if(!th) return;
+      const key = th.dataset.sort;
+      if(sortKey===key){ sortDir = (sortDir==='asc')?'desc':'asc'; }
+      else{ sortKey = key; sortDir = (key==='name')?'asc':'desc'; }
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

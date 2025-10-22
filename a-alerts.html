@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
+  <title>알림</title>
+  <link rel="stylesheet" href="assets/app.css" />
+  <style>
+    .alert-input{
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: #fff;
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
+      box-sizing: border-box;
+    }
+    .alert-actions{
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .alert-btn{
+      padding: 15px 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ececec;
+      background: #d9d9d9;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .06s ease, background-color .15s ease;
+      width: 100%;
+      font-size: 16px;
+    }
+    .alert-select {
+      width: 140px;
+      padding: 8px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      margin: 10px 0;
+      outline: none;
+      background: white;
+    }   
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast hidden"></div>
+  <main class="container">
+
+  <section class="card">
+    <h2>알림보내기</h2>
+        <label class="label">발송 대상</label>
+        <select id="selectTarget" class="alert-select">
+          <option value="">번호 선택</option>
+          <option>전체 발송</option>
+          <option>직접 입력</option>
+        </select>
+        <textarea class="alert-input" id="adminAlertMsg" rows="3" placeholder="예) 21:30 포토 타임 시작합니다!"></textarea>
+        <label class="label">내용 선택</label>
+        <select id="selectTarget" class="alert-select">
+          <option value="">발송 내용</option>
+          <option>21:30 포토 타임 시작합니다!</option>
+          <option>직접 입력</option>
+        </select>
+        <textarea class="alert-input" id="adminAlertMsg" rows="3" placeholder="예) 21:30 포토 타임 시작합니다!"></textarea>
+        <div class="alert-actions">
+            <button type="submit" class="alert-btn">알림 보내기</button>
+        </div>
+    </div>
+  </section>
+
+  </main>
+  <script src="assets/app.js"></script>
+  <script>
+    App.renderNavAlt('alerts');
+  </script>
+</body>
+</html>
