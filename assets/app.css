@@ -5,9 +5,23 @@
   --ring: 0 0 0 2px rgba(129,161,255,.35);
 }
 
-html,body{height:100%}
+.mini{font-size:14px}
+
+.btn-darkgray {background-color: #363636; color: #fff;}
+.btn-gray {background-color: #d9d9d9; color: #212121;}
+.btn-blue {background-color: #5270ff; color: #fff;}
+.btn-white {background-color: #fff; color: #212121;}
+.btn-red {background-color: #ff7096; color: #fff;}
+.muted {color:var(--muted)}
+.hidden {display:none !important}
+
+
+html,body {
+  height:100%
+}
+
 body {
-  margin:0; 
+  margin:0 auto; 
   font-family: 'Pretendard' ,ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji; 
   background:var(--bg); 
   color:var(--txt); 
@@ -17,25 +31,33 @@ body {
   min-height:100svh; 
   flex-direction: column;
   overflow-x: hidden;
+  max-width: 450px;
+  padding-bottom: 72px;
 }
 
 a{color:var(--acc); text-decoration:none}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 24px 0; /* 제목 아래에 일관된 여백 제공 */
+}
+
 .container {
-  padding: 15px;
   width:100%;  
   margin:0 auto;
 }
+
 .card {
   background:var(--card); 
   border-radius:14px; 
   padding:16px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* 그림자 스타일을 추가하여 일관성 유지 */
+  margin-top: 20px;
 }
 
-.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 16px; min-height:48px; border-radius:12px; border:1px solid #2a3140; background:#1b2030; color:var(--txt); cursor:pointer; font-size:16px}
-.btn:hover{background:#21273a}
-.btn.acc{background:linear-gradient(180deg, #6e86ff, #5270ff); border:none}
 input:focus,select:focus,textarea:focus{outline:none; box-shadow:var(--ring)}
+
 label{
   display: block;
   margin-bottom: 0;
@@ -43,65 +65,7 @@ label{
   font-size: 14px;
   padding-left: 7px;
 }
-.muted{color:var(--muted)}
-.hidden{display:none !important}
 
-.nav{
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 0;
-  width: 100%;
-  z-index: 1000;
-  background-color: #ffffff;
-  box-shadow: 0 0px 24px rgba(0, 0, 0, .10), 0 0px 0 rgba(0, 0, 0, 05);
-  border-radius: 20px 20px 0 0;
-}
-
-.tabs{
-  display:grid;
-  grid-template-columns: repeat(var(--cols, 4), 1fr); /* 기본 4등분 */
-  align-items:center;
-  justify-items:center;
-  gap:0;                 /* 간격 0으로 가로 스크롤 방지 */
-  width:100%;
-  margin:0;
-  padding:0;             /* 내부 여백 제거 */
-}
-
-.tab{ 
-  text-align:center; 
-  border-radius:12px;
-  cursor:pointer; 
-  color:#3a3a3a; 
-  font-weight:600;
-  display:flex; 
-  flex-direction:column; 
-  align-items:center; 
-  justify-content:center; 
-  gap:6px;
-  min-width:0;          /* 텍스트 줄바꿈 여유 */
-  padding:10px 0;
-}
-
-
-.tab .ico { 
-  width:26px; 
-  height:26px; 
-}
-.tab .ico img { 
-  width:100%; 
-  height:100%; 
-  object-fit:contain; 
-  display:block; 
-}
-
-.tab .lbl
-{
-  font-size:14px;
-  font-weight: 400; 
-  line-height:1
-}
 .badge {
   display:inline-flex; 
   align-items:center; 
@@ -125,12 +89,67 @@ label{
   border-color: #f1b8b8;
   color: #d33838;
 }
-.page-title {
-  font-size: 24px;
-  font-weight: 800;
-  margin: 0 0 24px 0; /* 제목 아래에 일관된 여백 제공 */
+
+
+/* 네비게이션바 */
+.nav{
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #ffffff;
+  box-shadow: 0 0px 24px rgba(0, 0, 0, .10), 0 0px 0 rgba(0, 0, 0, 05);
+  border-radius: 20px 20px 0 0;
+  max-width: 450px;
 }
-.list{display:flex; flex-direction:column; gap:20px}
+.tabs{
+  display:grid;
+  grid-template-columns: repeat(var(--cols, 4), 1fr); /* 기본 4등분 */
+  align-items:center;
+  justify-items:center;
+  gap:0;                 /* 간격 0으로 가로 스크롤 방지 */
+  width:100%;
+  margin:0;
+  padding:0;             /* 내부 여백 제거 */
+}
+.tab { 
+  text-align:center; 
+  border-radius:12px;
+  cursor:pointer; 
+  color:#3a3a3a; 
+  font-weight:600;
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  justify-content:center; 
+  gap:6px;
+  min-width:0;          /* 텍스트 줄바꿈 여유 */
+  padding:10px 0;
+}
+.tab .ico { 
+  width:26px; 
+  height:26px; 
+}
+.tab .ico img { 
+  width:100%; 
+  height:100%; 
+  object-fit:contain; 
+  display:block; 
+}
+.tab .lbl
+{
+  font-size:14px;
+  font-weight: 400; 
+  line-height:1
+}
+
+.list {
+  display:flex; 
+  flex-direction:column; 
+  gap:20px
+}
 .list .li {
   display: flex;
   flex-direction: column;
@@ -143,6 +162,7 @@ label{
   gap: 8px;
 }
 
+
 .form-main {
   flex-grow: 1;
   display: flex;
@@ -152,7 +172,7 @@ label{
   padding: 24px;
   box-sizing: border-box;
 }
+
 .toast{position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:#111521; border:1px solid #313b55; color:var(--txt); padding:10px 14px; border-radius:10px; box-shadow:0 6px 28px rgba(0,0,0,.35); z-index:99}
-.mini{font-size:14px}
 #mobileGuard{display:none; position:fixed; inset:0; background:rgba(5,8,13,.92); color:#e8ecf3; z-index:9999;}
 #mobileGuard .inner{max-width:520px; margin:auto; padding:24px; text-align:center;}
