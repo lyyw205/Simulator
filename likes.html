@@ -5,112 +5,24 @@
   <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
   <title>호감 보내기</title>
   <link rel="stylesheet" href="assets/app.css" />
-  <style>
-    .likes-page-content-layout {
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      flex-direction: column;
-      height: calc(100svh - 130px - env(safe-area-inset-bottom));
-      overflow: hidden; /* 세로/가로 모두 내부 넘침 방지 */
-    }
-
-    /* 전체 컨테이너 (고정) */
-    .pulse-circle {
-      position: relative;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, #fff 70%, #f3f4f6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: visible;
-    }
-
-    /* 가장자리 원 - 애니메이션 전용 레이어 */
-    .pulse-ring {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgb(209 209 209 / 30%);
-      animation: ringBeat 2.4s infinite;
-      pointer-events: none;
-    }
-
-    /* 두근두근 (두 번 빠르게 → 쉬기) */
-    @keyframes ringBeat {
-      0%   { transform: scale(1); opacity: 0.8; }
-      10%  { transform: scale(1.08); opacity: 1; }
-      20%  { transform: scale(1.0); opacity: 0.7; }
-      30%  { transform: scale(1.06); opacity: 1; }
-      40%  { transform: scale(1.0); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 0.8; }
-    }
-
-    /* 내부 내용 */
-    .inner {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-    }
-
-    .inner .heart-icon {
-      font-size: 22px;
-      color: #ff7096;
-      margin-bottom: 12px;
-    }
-
-    .btn-like {
-      display: block;
-      margin: 16px auto 0;
-      padding: 8px 18px;
-      border: none;
-      border-radius: 10px;
-      background: #ff7096;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn-like:hover {
-      background: #ff4d78;
-    }
-
-    .hint {
-      margin-top: 30px;
-      text-align: center;
-    }
-
-    #selectTarget {
-      color: #707070;
-    }
-
-  </style>
 </head>
 <body>
   <div class="page-wrapper">
     <main class="main-content likes-page-content-layout">
       <div class="pulse-circle">
-        <!-- 애니메이션용 바깥 링 -->
         <div class="pulse-ring"></div>
-
-        <!-- 내부 내용 (고정) -->
         <div class="inner">
-          <div class="heart-icon">🤍</div>
-          <select id="selectTarget" class="form-input">
+          <div class="heart-icon" aria-hidden="true">🤍</div>
+          <select id="selectTarget" class="form-input" aria-label="호감을 보낼 상대 번호 선택">
             <option value="">번호 선택</option>
             <option>1번</option>
             <option>2번</option>
             <option>3번</option>
           </select>
-          <button class="btn-like" id="btnSendLike">호감보내기</button>
+          <button class="btn-like" type="submit" id="btnSendLike">호감보내기</button>
         </div>
       </div>
-      <div class="hint mini muted">원하는 상대의 번호를 선택하여 호감을 보내보세요 :)</div>
+      <p class="hint mini muted">원하는 상대의 번호를 선택하여 호감을 보내보세요 :)</p>
     </main>
   </div>
 

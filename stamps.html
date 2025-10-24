@@ -5,23 +5,6 @@
   <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
   <title>스탬프</title>
   <link rel="stylesheet" href="assets/app.css" />
-  <style>
-
-    .stamp-section {
-      display:flex; 
-      align-items:center; 
-      justify-content:space-between; 
-      gap:8px
-    }
-    .mission-name {
-      font-weight: 700;
-      font-size: 16px;
-    }
-    .title {
-      margin: 40px 0 0 0;
-    }
-
-  </style>
 </head>
 <body>
   <div class="page-wrapper">
@@ -33,11 +16,17 @@
               <div class="muted mini">미션 1</div>
               <div class="mission-name">포토존 사진 찍기</div>
             </div>
-            <div class="badge">대기</div>
+            <div class="badge ok">완료</div>
           </div>
       </section>
       <section class="card">
-        <div id="myStampGrid" class="stamp-mission"></div>
+        <div class="stamp-section">
+          <div>
+            <div class="muted mini">미션 2</div>
+            <div class="mission-name">인스타 올리기</div>
+          </div>
+          <div class="badge">대기</div>
+        </div>
       </section>
     </main>
   </div>

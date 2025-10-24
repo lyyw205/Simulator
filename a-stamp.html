@@ -6,81 +6,28 @@
   <title>알림</title>
   <link rel="stylesheet" href="assets/app.css" />
   <style>
-    .stamp-input{
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      background: #fff;
-      outline: none;
-      transition: border-color .15s ease, box-shadow .15s ease;
-      box-sizing: border-box;
-      font-size: 12px;
-    }
-    .stamp-input::placeholder {
-        font-family: 'Pretendard', sans-serif; /* 폰트 패밀리 설정 */
-        color: #b6bfca;      /* 색상: 약간 흐린 회색 */
-        font-size: 15px;      /* 크기: 실제 폰트(16px)보다 약간 작게 */
-        font-weight: 400;     /* 굵기: 일반 두께 */
-    }
-    .stamp-actions{
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-    .stamp-btn1, .stamp-btn2 {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform .06s ease, background-color .15s ease;
-      width: 100%;
-      font-size: 14px;
-    }
-    .stamp-btn1 {
-      background: #d9d9d9;
-    }
-    .stamp-btn2 {
-      background: #414141;
-      color: #fff;
-    }
-    .stamp-select {
-      width: 140px;
-      padding: 8px 10px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 14px;
-      margin: 10px 0;
-      outline: none;
-      background: white;
-    }   
-    .mission-content {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
   </style>
 </head>
 <body>
   <div class="page-wrapper">
     <main class="main-content">
       <h2 class="page-title">미션 설정하기</h2>
-      <div class="card mission-content">
-          <label class="label">미션 설정</label>
-          <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
-          <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
-      </div>
-      <div class="card mission-content">
-          <label class="label">미션 설정</label>
-          <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
-          <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
-      </div>
-      <div class="stamp-actions">
-          <button type="submit" class="btn-darkgray btn-first">미션 추가하기</button>
-          <button type="submit" class="btn-lightgray btn-second">저장하기</button>
-      </div>
+      <form>
+        <div class="card mission-content">
+            <label class="label">미션 설정</label>
+            <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
+            <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
+        </div>
+        <div class="card mission-content">
+            <label class="label">미션 설정</label>
+            <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
+            <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
+        </div>
+        <div class="stamp-actions">
+            <button type="button" class="btn-darkgray btn-first">미션 추가하기</button>
+            <button type="submit" class="btn-lightgray btn-second">저장하기</button>
+        </div>
+      </form>
     </main>
   </div>
   <script src="assets/app.js"></script>

@@ -5,36 +5,21 @@
   <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
   <title>참가자 리스트</title>
   <link rel="stylesheet" href="assets/app.css" />
-  <style>
-    /* 표 그리드: [이름(번호)] [받은] [보낸] [매칭상대] */
-    .guest-table{ display:grid; grid-template-columns: 1fr 80px 80px 1fr; gap:8px; }
-    .row{ display:contents; }
-    .th,.td{ display: flex; align-items: center; padding:8px 4px; border-radius:10px; font-size: 14px;}
-    .td.center{ text-align:center; }
-    .td.matches{ word-break: break-word; }
-    .pill{ display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; background:#f3f4f6; font-weight:700; }
-    .td.center, .th.center { justify-content:center; }
-    /* 헤더 자체에서 정렬 */
-    .thead{ display:contents; }
-    .th{ font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; }
-    .th .arrow{ font-size:11px; color:#8b93a7; }
-    .th.active{ box-shadow:0 0 0 4px rgba(59,130,246,.12); border:1px solid #93c5fd; }
-  </style>
 </head>
 <body>
   <div class="page-wrapper">
     <main class="main-content">
       <div class="page-title">참가자 리스트</div>
       <section class="card">
-        <div class="guest-table" id="table">
-          <div class="thead" id="thead">
-            <div class="th" data-sort="name">이름(번호) <span class="arrow"></span></div>
+        <div class="guest-table" id="table" role="table">
+          <div class="thead" id="thead" role="rowgroup">
+            <div class="th" data-sort="name">이름/번호 <span class="arrow"></span></div>
             <div class="th center" data-sort="recv">받은 <span class="arrow"></span></div>
             <div class="th center" data-sort="sent">보낸 <span class="arrow"></span></div>
             <div class="th center" data-sort="matches">매칭 번호 <span class="arrow"></span></div>
           </div>
 
-          <div class="table" id="list" style="display:contents;"></div>
+          <div class="table" id="list"></div>
         </div>
       </section>
     </main>

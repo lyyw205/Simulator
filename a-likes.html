@@ -5,70 +5,6 @@
   <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
   <title>알림</title>
   <link rel="stylesheet" href="assets/app.css" />
-  <style> 
-
-    .tabs-mini { 
-        display:flex; 
-        gap:8px; 
-        margin:12px 0; 
-    }
-    .tabs-mini button {
-        flex:1; 
-        padding:10px 12px; 
-        border-radius:10px; 
-        border:1px solid #e5e7eb; 
-        background:#fff;
-    }
-    .tabs-mini .on { 
-        border-color:#93c5fd; 
-        box-shadow:0 0 0 4px rgba(59,130,246,.12); 
-    }
-
-    .likes-select {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 14px;
-      margin: 10px 0;
-      outline: none;
-      background: white;
-    }   
-    .msg-text {
-        font-size: 14px;
-    }
-    .msg-section {     
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    border-radius: 20px;
-    }
-    .msg-line1 { 
-        display:flex; 
-        align-items:center; 
-        justify-content:space-between; 
-    }
-    .msg-line2 { 
-        display:flex; 
-        align-items:center; 
-        gap:8px; 
-    }
-    .msg-form-input {      
-        width: 100%;
-        padding: 8px 10px;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        font-size: 14px;
-        margin: 10px 0;
-        outline: none;
-        background: white;
-    }
-    .msg-line4 {
-        display:flex; 
-        gap:8px; 
-        flex-wrap:wrap;
-    }
-  </style>
 </head>
 <body>
     <div class="page-wrapper">
@@ -78,7 +14,7 @@
                 <button type="button" data-tab="sent">발송 완료</button>
                 <button type="button" data-tab="fail">실패</button>
             </div>
-            <div class="card" id="msCenter">
+            <form class="card" id="wait-msg-form">
                 <div class="msg-section">
                     <div class="msg-line1">
                         <div>
@@ -97,12 +33,12 @@
                         <option>“서로 호감이 있는 상대가 생겼어요. 확인해 보세요!”</option>
                     </select>
                     <div class="msg-line4">
-                        <button class="btn-blue btn-first">보내기</button>
-                        <button class="btn-lightgray btn-second">건너뛰기</button>
+                        <button type="submit" class="btn-blue btn-first">보내기</button>
+                        <button type="button" class="btn-lightgray btn-second">건너뛰기</button>
                     </div>
                 </div>
-            </div>
-            <div class="card" id="msList">
+            </form>
+            <form class="card" id="complete-msg-form">
                 <div class="msg-section">
                     <div class="msg-line1">
                         <div>
@@ -118,8 +54,8 @@
                     <p class="msg-text">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</p>
                     </div>
                 </div>
-            </div>
-            <div class="card" id="msList">
+            </form>
+            <form class="card" id="failed-msg-form">
                 <div class="msg-section">
                     <div class="msg-line1">
                         <div>
@@ -138,11 +74,11 @@
                     </select>
 
                     <div class="msg-line4">
-                        <button class="btn-blue btn-first">재전송</button>
-                        <button class="btn-lightgray btn-second">건너뛰기</button>
+                        <button type="submit" class="btn-blue btn-first">재전송</button>
+                        <button type="button" class="btn-lightgray btn-second">건너뛰기</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </main>
     </div>
   <script src="assets/app.js"></script>

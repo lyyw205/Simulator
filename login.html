@@ -5,92 +5,27 @@
   <meta name="viewport" content="width=414, initial-scale=1, viewport-fit=cover" />
   <title>입장 확인</title>
   <link rel="stylesheet" href="assets/app.css" />
-  <style>
-    .form-card { /* auth 클래스명 변경 */
-      width: 100%;
-      max-width: 320px;
-    }
-    
-    /* 폼 스타일 */
-    .form-title { /* auth-title 클래스명 변경 */
-      margin: 0 0 8px;
-      font-size: 28px;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .form-desc { /* auth-desc 클래스명 변경 */
-      margin-bottom: 28px;
-      text-align: center;
-      line-height: 1.6;
-    }
-
-    .form-grid { /* auth-form 클래스명 변경 */
-      display: grid;
-      gap: 18px;
-    }
-    
-    .form-field label {
-      /* 공용 label 스타일과 겹치지 않는 부분만 남김 */
-      margin-bottom: 8px; 
-      font-size: 14px;
-    }
-
-    .form-input { /* auth-input 클래스명 변경 */
-      width: 100%;
-      font-size: 16px;
-      padding: 14px 16px;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      background: var(--card);
-      transition: border-color .15s ease, box-shadow .15s ease;
-      box-sizing: border-box;
-    }
-
-    .form-input::placeholder { color: #b6bfca; }
-
-    .form-input:focus {
-      border-color: var(--acc);
-      box-shadow: var(--ring);
-    }
-    
-    .form-actions { /* auth-actions 클래스명 변경 */
-      margin-top: 24px;
-    }
-
-    .btn-full {
-      width: 100%;
-    }
-  </style>
 </head>
 <body>
-  <main class="form-main">
-      <section class="form-card">
-        <h1 class="form-title">입장 확인</h1>
-        <!-- p 태그에 공용 .muted 클래스 직접 사용 -->
-        <p class="form-desc muted">전화번호와 이름을 입력하면<br>예약자와 매칭 후 입장합니다.</p>
-
-        <form id="loginForm">
-          <div class="form-grid">
-            <div class="form-field">
-              <label for="name">이름</label>
-              <input id="name" type="text" class="form-input" placeholder="ex. 김민수">
-            </div>
-
-            <div class="form-field">
-              <label for="phone">전화번호</label>
-              <input id="phone" type="tel" class="form-input" placeholder="ex. 01012345678" inputmode="numeric">
-            </div>
+  <div class="page-wrapper">
+    <main class="main-content">
+        <form class="login-section">
+          <h1 class="form-title">입장 확인</h1>
+          <p class="form-desc muted">전화번호와 이름을 입력하면<br>예약자와 매칭 후 입장합니다.</p>
+          <div class="login-name">
+            <label for="name" class="label">이름</label>
+            <input id="name" type="text" class="form-input" placeholder="ex. 김민수">
           </div>
-
-          <div class="form-actions">
-            <!-- 클래스 변경: 공용 .btn 스타일 사용 -->
-            <button type="submit" class="btn acc btn-full">입장하기</button>
+          <div class="login-number">
+            <label for="phone" class="label">전화번호</label>
+            <input id="phone" type="tel" class="form-input" placeholder="ex. 01012345678" inputmode="numeric">
+          </div>
+          <div class="login-actions">
+            <button type="submit" class="btn-blue btn-login">입장하기</button>
           </div>
         </form>
-      </section>
-  </main>
-  <p id="loginMsg" class="mini muted" style="text-align:center;margin-top:8px;"></p>
+    </main>
+  </div>
 <!-- 개발 중 모바일가드 비활성화 -->
   <style>#mobileGuard{display:none!important}</style>
   <script src="assets/app.js"></script>
