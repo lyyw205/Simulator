@@ -101,7 +101,7 @@ function renderNav(active){
   const adminParam = (new URL(location.href)).searchParams.get('admin')==='1';
   const nav = document.createElement('div');
   nav.className='nav';
-  nav.innerHTML = `<div class="container"><div class="tabs">`+
+  nav.innerHTML = `<div class="tabs">`+
     tabs.map(t=>{
       const isActive = active===t.key;
       const icon = isActive ? t.iconActive : t.iconInactive;

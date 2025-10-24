@@ -7,19 +7,13 @@
   <link rel="stylesheet" href="assets/app.css" />
   <style>
     /* 표 그리드: [이름(번호)] [받은] [보낸] [매칭상대] */
-    .table{ display:grid; grid-template-columns: 1fr 80px 80px 1fr; gap:8px; }
+    .guest-table{ display:grid; grid-template-columns: 1fr 80px 80px 1fr; gap:8px; }
     .row{ display:contents; }
-    .th,.td{ padding:10px 4px; background:#fff; border-radius:10px; font-size: 14px; justify-content: center; }
+    .th,.td{ display: flex; align-items: center; padding:8px 4px; border-radius:10px; font-size: 14px;}
     .td.center{ text-align:center; }
     .td.matches{ word-break: break-word; }
     .pill{ display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; background:#f3f4f6; font-weight:700; }
-
-    /* 제목 바(필터 삭제) */
-    .toolbar{ grid-column:1 / -1; position:sticky; top:0; z-index:5;
-      display:flex; align-items:center; justify-content:space-between;
-      background:#fff; padding:10px 12px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
-    .toolbar .title{ font-weight:800; font-size:16px; }
-
+    .td.center, .th.center { justify-content:center; }
     /* 헤더 자체에서 정렬 */
     .thead{ display:contents; }
     .th{ font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; }
@@ -28,28 +22,23 @@
   </style>
 </head>
 <body>
-  <div id="toast" class="toast hidden"></div>
+  <div class="page-wrapper">
+    <main class="main-content">
+      <div class="page-title">참가자 리스트</div>
+      <section class="card">
+        <div class="guest-table" id="table">
+          <div class="thead" id="thead">
+            <div class="th" data-sort="name">이름(번호) <span class="arrow"></span></div>
+            <div class="th center" data-sort="recv">받은 <span class="arrow"></span></div>
+            <div class="th center" data-sort="sent">보낸 <span class="arrow"></span></div>
+            <div class="th center" data-sort="matches">매칭 번호 <span class="arrow"></span></div>
+          </div>
 
-  <main class="container">
-    <section class="card">
-      <div class="table" id="table">
-        <!-- 제목(정렬 컨트롤 제거됨) -->
-        <div class="toolbar"><div class="title">참가자 리스트</div></div>
-
-        <!-- 열 헤더(여기 클릭해서 정렬) -->
-        <div class="thead" id="thead">
-          <div class="th" data-sort="name">이름(번호) <span class="arrow"></span></div>
-          <div class="th center" data-sort="recv">받은 <span class="arrow"></span></div>
-          <div class="th center" data-sort="sent">보낸 <span class="arrow"></span></div>
-          <div class="th" data-sort="matches">매칭 번호 <span class="arrow"></span></div>
+          <div class="table" id="list" style="display:contents;"></div>
         </div>
-
-        <!-- 리스트 -->
-        <div class="table" id="list" style="display:contents;"></div>
-      </div>
-    </section>
-  </main>
-
+      </section>
+    </main>
+  </div>
   <script src="assets/app.js"></script>
   <script>
     App.renderNavAlt?.();
@@ -101,7 +90,7 @@
           <div class="td">${r.nameText}</div>
           <div class="td center"><span class="pill">+${r.recv}</span></div>
           <div class="td center"><span class="pill">${r.sent}</span></div>
-          <div class="td matches">${r.matchesText}</div>
+          <div class="td matches center">${r.matchesText}</div>
         </div>
       `).join('');
       paintHeader();

@@ -6,34 +6,16 @@
   <title>스탬프</title>
   <link rel="stylesheet" href="assets/app.css" />
   <style>
-    .main {
-      background: #f9fafb;
-      border-radius:14px; 
-      margin: 20px;
+
+    .stamp-section {
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between; 
+      gap:8px
     }
-    .stamp-mission {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin: 20px 0;
-    }
-    .stamp-mission-card {
-      background:var(--card); 
-      border-radius:14px; 
-      padding:16px;
-      box-shadow: 0 0px 10px rgba(0, 0, 0, .10), 0 0px 0 rgba(0, 0, 0, 0.1);
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 30px;
-      border-radius: 15px;
-      padding: 0px 15px;
-      background: #ececec;
-      border: 1px solid #d9d9d9;
-      font-weight: 400;
-      font-size: 14px;
+    .mission-name {
+      font-weight: 700;
+      font-size: 16px;
     }
     .title {
       margin: 40px 0 0 0;
@@ -42,15 +24,23 @@
   </style>
 </head>
 <body>
-  <div id="toast" class="toast hidden"></div>
-  <main class="container">
-
-  <section class="main">
-    <h2 class="page-title">스탬프 미션</h2>
-    <div id="myStampGrid" class="stamp-mission"></div>
-  </section>
-
-  </main>
+  <div class="page-wrapper">
+    <main class="main-content">
+      <h2 class="page-title">스탬프 미션</h2>
+      <section class="card">
+          <div class="stamp-section">
+            <div>
+              <div class="muted mini">미션 1</div>
+              <div class="mission-name">포토존 사진 찍기</div>
+            </div>
+            <div class="badge">대기</div>
+          </div>
+      </section>
+      <section class="card">
+        <div id="myStampGrid" class="stamp-mission"></div>
+      </section>
+    </main>
+  </div>
   <script src="assets/app.js"></script>
   <script>
     App.ensureDefaults();

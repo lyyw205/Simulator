@@ -9,11 +9,22 @@
 
 .btn-darkgray {background-color: #363636; color: #fff;}
 .btn-gray {background-color: #d9d9d9; color: #212121;}
+.btn-lightgray {background:#fff; border:1px solid #e5e7eb;}
 .btn-blue {background-color: #5270ff; color: #fff;}
 .btn-white {background-color: #fff; color: #212121;}
 .btn-red {background-color: #ff7096; color: #fff;}
 .muted {color:var(--muted)}
 .hidden {display:none !important}
+.btn-first {
+    flex:1; 
+    padding:10px 12px; 
+    border-radius:10px; 
+    border:none
+}
+.btn-second {
+    padding:10px 12px; 
+    border-radius:10px; 
+}
 
 
 html,body {
@@ -32,7 +43,6 @@ body {
   flex-direction: column;
   overflow-x: hidden;
   max-width: 450px;
-  padding-bottom: 72px;
 }
 
 a{color:var(--acc); text-decoration:none}
@@ -43,9 +53,21 @@ a{color:var(--acc); text-decoration:none}
   margin: 0 0 24px 0; /* 제목 아래에 일관된 여백 제공 */
 }
 
-.container {
+.card-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 10px;
+}
+
+.page-wrapper {
   width:100%;  
   margin:0 auto;
+  flex-grow: 1; /* 남은 공간을 모두 채우도록 설정 */
+  padding-bottom: 72px; /* 네비게이션 높이만큼 패딩을 추가 */
+}
+
+.main-content {
+  margin: 20px;
 }
 
 .card {
@@ -67,17 +89,17 @@ label{
 }
 
 .badge {
-  display:inline-flex; 
-  align-items:center; 
-  justify-content:center; 
-  height:28px; 
-  border-radius:999px; 
-  padding:0 12px; 
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  border-radius: 15px;
+  padding: 0px 15px;
   background:#f3f4f6;
   border:1px solid #e5e7eb;
-  font-weight:600;
   color: var(--txt);
+  font-weight: 400;
+  font-size: 13px;
 }
 .badge.ok {
   background:#e7f8ee; 
@@ -89,6 +111,14 @@ label{
   border-color: #f1b8b8;
   color: #d33838;
 }
+.badge-like { 
+  background:#eef5ff; 
+  color:#1b4b91; 
+  padding:2px 8px; 
+  border-radius:999px; 
+  font-weight:700; 
+}
+
 
 
 /* 네비게이션바 */
@@ -172,7 +202,13 @@ label{
   padding: 24px;
   box-sizing: border-box;
 }
-
-.toast{position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:#111521; border:1px solid #313b55; color:var(--txt); padding:10px 14px; border-radius:10px; box-shadow:0 6px 28px rgba(0,0,0,.35); z-index:99}
-#mobileGuard{display:none; position:fixed; inset:0; background:rgba(5,8,13,.92); color:#e8ecf3; z-index:9999;}
-#mobileGuard .inner{max-width:520px; margin:auto; padding:24px; text-align:center;}
+.form-input {
+  width: 140px;
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 6px;
+  outline: none;
+  background: white;
+}

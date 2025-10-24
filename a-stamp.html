@@ -56,37 +56,33 @@
       outline: none;
       background: white;
     }   
-    .mission-box {
+    .mission-content {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        background: #fff;
-        border-radius:14px; 
-        padding:16px;
-        box-shadow: 0 0px 10px rgba(0, 0, 0, .08), 0 0px 0 rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <main class="container">
-    <h2 class="page-title">미션 설정하기</h2>
-        <div class="mission-box">
-            <label class="label">미션 설정</label>
-            <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
-            <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
-        </div>
-        <div class="mission-box">
-            <label class="label">미션 설정</label>
-            <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
-            <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
-        </div>
-        <div class="stamp-actions">
-            <button type="submit" class="stamp-btn1">미션 추가하기</button>
-            <button type="submit" class="stamp-btn2">저장하기</button>
-        </div>
-    </div>
-  </main>
+  <div class="page-wrapper">
+    <main class="main-content">
+      <h2 class="page-title">미션 설정하기</h2>
+      <div class="card mission-content">
+          <label class="label">미션 설정</label>
+          <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
+          <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
+      </div>
+      <div class="card mission-content">
+          <label class="label">미션 설정</label>
+          <input class="stamp-input" placeholder="미션 카테고리를 입력하세요"></input>
+          <input class="stamp-input" placeholder="미션 내용을 입력하세요"></input>
+      </div>
+      <div class="stamp-actions">
+          <button type="submit" class="btn-darkgray btn-first">미션 추가하기</button>
+          <button type="submit" class="btn-lightgray btn-second">저장하기</button>
+      </div>
+    </main>
+  </div>
   <script src="assets/app.js"></script>
   <script>
     App.renderNavAlt('alerts');

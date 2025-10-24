@@ -6,75 +6,24 @@
   <title>알림</title>
   <link rel="stylesheet" href="assets/app.css" />
   <style> 
-    .toggle{padding:2px 8px; border-radius:12px; background:#f1f5f9; font-weight:700}
-    .toggle.on{background:#e7f7ee; color:#137a3a}
 
-    .ms-head{display:flex; align-items:center; justify-content:space-between}
-    .ms-sub{display:flex; align-items:center; gap:8px}
-    .badge-like{background:#eef5ff; color:#1b4b91; padding:2px 8px; border-radius:999px; font-weight:700}
-    .ms-preview{margin:6px 0 0; color:#4b5563}
-
-    .chip{padding:4px 8px; border-radius:999px; font-size:12px}
-    .chip-wait{background:#f3f4f6; color:#6b7280}
-    .chip-ok{background:#e9fff1; color:#187a42}
-    .chip-error{background:#ffecec; color:#b91c1c}
-    .chip-hold{background:#fff7e6; color:#b45309}
-
-    .ms-actions{display:flex; gap:8px}
-    .btn-pri{flex:1; padding:10px 12px; border-radius:10px; background:#5270ff; color:#fff; border:none}
-    .btn-ghost{padding:10px 12px; border-radius:10px; background:#fff; border:1px solid #e5e7eb}
-    .btn-icon{padding:10px; border-radius:10px; background:#fff; border:1px solid #e5e7eb}
-    /* ===== Milestone(5명 도달) UI ===== */
-    .milestone-banner{
-    position: sticky; top: 0; z-index: 5;
-    background:#fff; padding:10px 12px; border-radius:12px;
-    box-shadow:0 2px 12px rgba(0,0,0,.06); 
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:12px;
+    .tabs-mini { 
+        display:flex; 
+        gap:8px; 
+        margin:12px 0; 
     }
-    .milestone-banner b{ font-size:16px; }
-    .ms-ctrl{ display:flex; align-items:center; gap:8px; }
-
-    .toggle{
-    padding:6px 10px; border-radius:999px; border:1px solid #e5e7eb;
-    background:#fff; font-weight:700; min-width:64px; text-align:center;
+    .tabs-mini button {
+        flex:1; 
+        padding:10px 12px; 
+        border-radius:10px; 
+        border:1px solid #e5e7eb; 
+        background:#fff;
     }
-    .toggle.on{ background:#e7f7ee; color:#137a3a; border-color:#b8e6c9; }
-
-    .tabs-mini{ display:flex; gap:8px; margin:12px 0; }
-    .tabs-mini button{
-    flex:1; padding:10px 12px; border-radius:10px; border:1px solid #e5e7eb; background:#fff;
+    .tabs-mini .on { 
+        border-color:#93c5fd; 
+        box-shadow:0 0 0 4px rgba(59,130,246,.12); 
     }
-    .tabs-mini .on{ border-color:#93c5fd; box-shadow:0 0 0 4px rgba(59,130,246,.12); }
 
-    .ms-card{     
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 90%;
-    margin: 10px auto;
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 20px;
-    box-shadow: 0 0px 24px rgba(0, 0, 0, .10), 0 0px 0 rgba(0, 0, 0, 05);
-    }
-    .ms-head{ display:flex; align-items:center; justify-content:space-between; }
-    .ms-sub{ display:flex; align-items:center; gap:8px; }
-    .badge-like{ background:#eef5ff; color:#1b4b91; padding:2px 8px; border-radius:999px; font-weight:700; }
-    .ms-preview{ margin:4px 0 0; color:#4b5563; }
-
-    .chip{ padding:4px 8px; border-radius:999px; font-size:12px; }
-    .chip-wait{ background:#f3f4f6; color:#6b7280; }
-    .chip-ok{ background:#e9fff1; color:#187a42; }
-    .chip-error{ background:#ffecec; color:#b91c1c; }
-    .chip-hold{ background:#fff7e6; color:#b45309; }
-
-    .ms-actions{ display:flex; gap:8px; flex-wrap:wrap; }
-    .ms-btn-pri{ flex:1; padding:10px 12px; border-radius:10px; background:#5270ff; color:#fff; border:none; }
-    .ms-btn-ghost{ padding:10px 12px; border-radius:10px; background:#fff; border:1px solid #e5e7eb; }
-    .ms-btn-icon{ padding:10px; border-radius:10px; background:#fff; border:1px solid #e5e7eb; }
-
-    .ms-time{ font-size:12px; color:#8f8f8f; margin-left:auto; }
     .likes-select {
       width: 100%;
       padding: 8px 10px;
@@ -85,96 +34,117 @@
       outline: none;
       background: white;
     }   
-    .p-text {
+    .msg-text {
         font-size: 14px;
+    }
+    .msg-section {     
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-radius: 20px;
+    }
+    .msg-line1 { 
+        display:flex; 
+        align-items:center; 
+        justify-content:space-between; 
+    }
+    .msg-line2 { 
+        display:flex; 
+        align-items:center; 
+        gap:8px; 
+    }
+    .msg-form-input {      
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+        margin: 10px 0;
+        outline: none;
+        background: white;
+    }
+    .msg-line4 {
+        display:flex; 
+        gap:8px; 
+        flex-wrap:wrap;
     }
   </style>
 </head>
 <body>
-    <section class="card" id="msCenter">
-    <!-- 상태 탭 -->
-    <div class="tabs-mini" id="msTabs">
-        <button type="button" data-tab="wait" class="on">발송 대기</button>
-        <button type="button" data-tab="sent">발송 완료</button>
-        <button type="button" data-tab="fail">실패</button>
-    </div>
-
-    <!-- 리스트 -->
-    <div class="list" id="msList"></div>
-        <!-- 큐 카드 -->
-        <div class="li ms-card">
-        <div class="ms-head">
-            <div>
-            <b>김민수</b> <span class="muted">(12)</span>
+    <div class="page-wrapper">
+        <main class="main-content">
+            <div class="tabs-mini" id="msTabs">
+                <button type="button" data-tab="wait" class="on">발송 대기</button>
+                <button type="button" data-tab="sent">발송 완료</button>
+                <button type="button" data-tab="fail">실패</button>
             </div>
-            <span class="chip chip-wait">대기</span>
-        </div>
+            <div class="card" id="msCenter">
+                <div class="msg-section">
+                    <div class="msg-line1">
+                        <div>
+                        <b>김민수</b> <span class="muted">(12)</span>
+                        </div>
+                        <span class="badge">대기</span>
+                    </div>
 
-        <div class="ms-sub">
-            <span class="badge-like">+5</span>
-            <span class="muted">최근 14:32</span>
-        </div>
-        <select id="selectTarget" class="likes-select">
-          <option value="">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
-          <option>“3명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
-          <option>“서로 호감이 있는 상대가 생겼어요. 확인해 보세요!”</option>
-        </select>
-
-        <div class="ms-actions">
-            <button class="btn-pri">보내기</button>
-            <button class="btn-ghost">건너뛰기</button>
-            <button class="btn-icon" title="로그"><span>🗒️</span></button>
-        </div>
-        </div>
-    </div>
-    <div class="list" id="msList"></div>
-        <!-- 큐 카드 -->
-        <div class="li ms-card">
-        <div class="ms-head">
-            <div>
-            <b>김민수</b> <span class="muted">(12)</span>
+                    <div class="msg-line2">
+                        <span class="badge-like">+5</span>
+                        <span class="muted">최근 14:32</span>
+                    </div>
+                    <select id="selectTarget" class="msg-form-input">
+                        <option value="">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+                        <option>“3명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+                        <option>“서로 호감이 있는 상대가 생겼어요. 확인해 보세요!”</option>
+                    </select>
+                    <div class="msg-line4">
+                        <button class="btn-blue btn-first">보내기</button>
+                        <button class="btn-lightgray btn-second">건너뛰기</button>
+                    </div>
+                </div>
             </div>
-            <span class="chip chip-wait">발송완료</span>
-        </div>
-
-        <div class="ms-sub">
-            <span class="badge-like">+5</span>
-            <span class="muted">최근 14:32</span>
-        </div>
-        <div>
-          <p class="p-text">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</p>
-        </div>
-    </div>
-    <div class="list" id="msList"></div>
-        <!-- 큐 카드 -->
-        <div class="li ms-card">
-        <div class="ms-head">
-            <div>
-            <b>김민수</b> <span class="muted">(12)</span>
+            <div class="card" id="msList">
+                <div class="msg-section">
+                    <div class="msg-line1">
+                        <div>
+                        <b>김민수</b> <span class="muted">(12)</span>
+                        </div>
+                        <span class="badge ok">발송완료</span>
+                    </div>
+                    <div class="msg-line2">
+                        <span class="badge-like">+5</span>
+                        <span class="muted">최근 14:32</span>
+                    </div>
+                    <div>
+                    <p class="msg-text">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</p>
+                    </div>
+                </div>
             </div>
-            <span class="chip chip-wait">실패</span>
-        </div>
+            <div class="card" id="msList">
+                <div class="msg-section">
+                    <div class="msg-line1">
+                        <div>
+                        <b>김민수</b> <span class="muted">(12)</span>
+                        </div>
+                        <span class="badge err">실패</span>
+                    </div>
+                    <div class="msg-line2">
+                        <span class="badge-like">+5</span>
+                        <span class="muted">최근 14:32</span>
+                    </div>
+                    <select id="selectTarget" class="likes-select">
+                        <option value="">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+                        <option>“3명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
+                        <option>“서로 호감이 있는 상대가 생겼어요. 확인해 보세요!”</option>
+                    </select>
 
-        <div class="ms-sub">
-            <span class="badge-like">+5</span>
-            <span class="muted">최근 14:32</span>
-        </div>
-        <select id="selectTarget" class="likes-select">
-          <option value="">“5명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
-          <option>“3명이 당신에게 호감을 보냈어요. 확인해 보세요!”</option>
-          <option>“서로 호감이 있는 상대가 생겼어요. 확인해 보세요!”</option>
-        </select>
-
-        <div class="ms-actions">
-            <button class="btn-pri">재전송</button>
-            <button class="btn-ghost">건너뛰기</button>
-            <button class="btn-icon" title="로그"><span>🗒️</span></button>
-        </div>
-        </div>
+                    <div class="msg-line4">
+                        <button class="btn-blue btn-first">재전송</button>
+                        <button class="btn-lightgray btn-second">건너뛰기</button>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </section>
-
-  </main>
   <script src="assets/app.js"></script>
   <script>
     App.renderNavAlt('alerts');

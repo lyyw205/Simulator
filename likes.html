@@ -6,13 +6,13 @@
   <title>호감 보내기</title>
   <link rel="stylesheet" href="assets/app.css" />
   <style>
-    main.container {
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      flex-direction:column;
-      height: calc(100svh - 72px - env(safe-area-inset-bottom));
-      overflow:hidden; /* 세로/가로 모두 내부 넘침 방지 */
+    .likes-page-content-layout {
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-direction: column;
+      height: calc(100svh - 130px - env(safe-area-inset-bottom));
+      overflow: hidden; /* 세로/가로 모두 내부 넘침 방지 */
     }
 
     /* 전체 컨테이너 (고정) */
@@ -63,17 +63,6 @@
       margin-bottom: 12px;
     }
 
-    .form-input {
-      width: 140px;
-      padding: 8px 10px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 14px;
-      margin-top: 6px;
-      outline: none;
-      background: white;
-    }
-
     .btn-like {
       display: block;
       margin: 16px auto 0;
@@ -103,25 +92,27 @@
   </style>
 </head>
 <body>
-  <main class="container">
-    <div class="pulse-circle">
-      <!-- 애니메이션용 바깥 링 -->
-      <div class="pulse-ring"></div>
+  <div class="page-wrapper">
+    <main class="main-content likes-page-content-layout">
+      <div class="pulse-circle">
+        <!-- 애니메이션용 바깥 링 -->
+        <div class="pulse-ring"></div>
 
-      <!-- 내부 내용 (고정) -->
-      <div class="inner">
-        <div class="heart-icon">🤍</div>
-        <select id="selectTarget" class="form-input">
-          <option value="">번호 선택</option>
-          <option>1번</option>
-          <option>2번</option>
-          <option>3번</option>
-        </select>
-        <button class="btn-like" id="btnSendLike">호감보내기</button>
+        <!-- 내부 내용 (고정) -->
+        <div class="inner">
+          <div class="heart-icon">🤍</div>
+          <select id="selectTarget" class="form-input">
+            <option value="">번호 선택</option>
+            <option>1번</option>
+            <option>2번</option>
+            <option>3번</option>
+          </select>
+          <button class="btn-like" id="btnSendLike">호감보내기</button>
+        </div>
       </div>
-    </div>
-    <div class="hint mini muted">원하는 상대의 번호를 선택하여 호감을 보내보세요 :)</div>
-  </main>
+      <div class="hint mini muted">원하는 상대의 번호를 선택하여 호감을 보내보세요 :)</div>
+    </main>
+  </div>
 
 
   <script>
